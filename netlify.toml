@@ -1,0 +1,13 @@
+[build]
+  command = "python3 build.py --production"
+  publish = "dist-production"
+[functions]
+  directory = "netlify/functions"
+[[redirects]]
+  from = "/ubezpieczenia/"
+  to = "/oferta/"
+  status = 301
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"

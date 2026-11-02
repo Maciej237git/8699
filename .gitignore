@@ -1,0 +1,8 @@
+# Build output (generowany przez `python3 build.py --production`)
+/dist-production/
+
+# Systemowe i tymczasowe pliki
+.DS_Store
+__pycache__/
+*.pyc
+.netlify/
