@@ -50,7 +50,7 @@ html{scroll-padding-top:104px}
 .hero-v4 h1{font-size:clamp(40px,4.35vw,62px);line-height:1.07;letter-spacing:-.055em}
 .hero-v4 h1 span{color:var(--red)}
 .hero-v4 .hero-lede{font-size:17px;line-height:1.75;max-width:480px;margin:26px 0 0;color:#5b6773}
-.hero-v4 .standard-line{margin:22px 0 30px}
+.hero-v4 .hero-lede{margin:22px 0 30px}
 .hero-v4 .actions{gap:12px}
 .hero-v4 .btn{padding:16px 24px}
 .hero-v4 .btn.ghost{background:#fff;color:var(--navy);border-color:#d5dbe2;box-shadow:0 1px 0 #ffffff}
