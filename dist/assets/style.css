@@ -7,7 +7,6 @@
 /* --- single-line labels, office cards with maps --- */
 p.eyebrow{white-space:nowrap;font-size:10px;letter-spacing:.17em;text-transform:uppercase}
 h1,h2,h3{text-wrap:balance}
-.subhero .eyebrow{font-size:10px;letter-spacing:.17em}
 .office-photo{position:relative;display:block;overflow:hidden;background:#e9edf1;height:100%;min-height:260px}
 .office-photo img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s}
 .office-photo:hover img{transform:scale(1.04)}
@@ -21,7 +20,7 @@ h1,h2,h3{text-wrap:balance}
 .office-addr a:hover{color:var(--red);border-color:var(--red)}
 @media(max-width:1000px){.office-photo{min-height:0;height:210px}}
 @media(max-width:760px){.office{grid-template-columns:1fr}.office-photo{height:190px}}
-@media(max-width:420px){p.eyebrow{font-size:9px;letter-spacing:.14em}.subhero .eyebrow{font-size:9px}}
+@media(max-width:420px){p.eyebrow{font-size:9px;letter-spacing:.14em}}
 @media(max-width:360px){p.eyebrow{font-size:9px;letter-spacing:.1em}}
 @media(max-width:1000px){.hero-v3-grid{gap:35px}.hero-v3 h1{font-size:51px}.hero-photo-v3>img{height:410px}.nav .links{gap:15px}.hero-v3 .lede{font-size:15px}}@media(max-width:760px){.hero-v3-grid{grid-template-columns:1fr;gap:35px;padding-top:45px;padding-bottom:35px}.hero-v3 h1{font-size:45px}.hero-v3 .lede{font-size:15px}.hero-photo-v3>img{height:290px;object-position:center 48%}.hero-benefits{gap:15px}.standard-inner{align-items:flex-start;flex-wrap:wrap}.standard-inner h2{font-size:21px;max-width:100%}.standard-inner p{max-width:100%}.timeline{margin-top:35px}.timeline:before{left:21px}.timeline-step{grid-template-columns:43px 1fr;gap:20px;min-height:150px}.timeline-dot{grid-column:1}.timeline-text,.timeline-step:nth-child(even) .timeline-text{grid-column:2;grid-row:1;text-align:left}.timeline h3{font-size:19px}.timeline p{font-size:12px}.media-grid{grid-template-columns:1fr;gap:35px}.partner-heading{display:flex;align-items:center}.brand-track{gap:15px;animation-duration:60s}.brand-set{gap:15px}.brand-logo{width:105px}.brand-controls button{width:30px;height:30px}.doc-categories{grid-template-columns:1fr;gap:30px}.initiative-grid{grid-template-columns:1fr}.certificates{gap:15px}.article h2{font-size:27px}.article p{font-size:14px}.service h3{font-size:18px}.service .more{font-size:11px}.service-top>.icon{font-size:25px}.service{padding:25px 18px}.service p{font-size:12px}}@media(prefers-reduced-motion:reduce){.brand-track{animation:none}.brand-window{overflow-x:auto;mask-image:none}}
 
