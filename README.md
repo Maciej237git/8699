@@ -12,6 +12,12 @@ Python 3, bez dodatkowych bibliotek:
     python3 build.py
     python3 -m http.server 8000 --directory dist
 
+Podgląd na GitHub Pages (ścieżka bazowa repozytorium):
+
+    python3 build.py --base /8699/
+
+Opcjonalnie: zmienna `SITE_BASE=/8699/`. Domyślny build lokalny i Netlify pozostają bez prefiksu.
+
 Podgląd: http://localhost:8000. Nie otwieraj strony przez file://.
 
 Eksport produkcyjny:

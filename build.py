@@ -5,6 +5,19 @@ from urllib.parse import quote
 P=Path(__file__).parent
 B=runpy.run_path(str(P/'base.py'))
 production='--production' in sys.argv
+SITE_BASE=''
+if '--base' in sys.argv:
+ i=sys.argv.index('--base')
+ if i+1<len(sys.argv):SITE_BASE=sys.argv[i+1].strip()
+if not SITE_BASE:SITE_BASE=__import__('os').environ.get('SITE_BASE','').strip()
+if SITE_BASE and not SITE_BASE.startswith('/'):SITE_BASE='/'+SITE_BASE
+if SITE_BASE and not SITE_BASE.endswith('/'):SITE_BASE+='/'
+if SITE_BASE=='/':SITE_BASE=''
+def apply_site_base(markup):
+ if not SITE_BASE:return markup
+ b=SITE_BASE.rstrip('/')
+ markup=re.sub(r'(href|src|poster|data-local-video)="(/[^"]*)"',lambda m:m.group(1)+'="'+b+m.group(2)+'"',markup)
+ return markup.replace('<html lang="pl">',f'<html lang="pl" data-site-base="{b}">',1)
 D=P/('dist-production' if production else 'dist');A=D/'assets'
 if production:shutil.copytree(P/'dist/assets',A,dirs_exist_ok=True)
 I={'car':'car-side','home':'house-chimney','life':'heart-pulse','business':'building-shield','plane':'plane-departure','shield':'shield-halved','pin':'location-dot','phone':'phone','arrow':'arrow-right','check':'check','play':'play','file':'file-arrow-down','clock':'clock','mail':'envelope','users':'people-group','handshake':'handshake','chevron':'chevron-right','left':'chevron-left','right':'chevron-right','pause':'pause'}
@@ -57,16 +70,13 @@ html{scroll-padding-top:104px}
 .site-header .menu{margin-left:auto}
 .skip-link{position:absolute;left:-9999px;top:0;z-index:200;background:var(--navy);color:#fff;padding:12px 18px;border-radius:0 0 5px 0;font-size:13px}
 .skip-link:focus{left:0}
-/* --- V3: hero bez zdjęcia --- */
-.hero-v4{position:relative;overflow:hidden;background:#f6f7f9;border-bottom:1px solid var(--line)}
-.hero-v4:before{content:"";position:absolute;inset:0;background:radial-gradient(62% 85% at 92% 4%,rgba(220,51,59,.11),transparent 62%),radial-gradient(55% 80% at 0% 100%,rgba(17,31,48,.08),transparent 66%);pointer-events:none}
-.hero-v4:after{content:"";position:absolute;inset:0;background-image:radial-gradient(#111f30 1px,transparent 1px);background-size:26px 26px;opacity:.055;-webkit-mask-image:linear-gradient(105deg,#000,transparent 58%);mask-image:linear-gradient(105deg,#000,transparent 58%);pointer-events:none}
-.hero-v4-grid{position:relative;z-index:1;display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center;padding-top:78px;padding-bottom:84px}
+/* --- V4: hero with office photo slider --- */
+.hero-v4{background:#f6f7f9;border-bottom:1px solid var(--line)}
+.hero-v4-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center;padding-top:78px;padding-bottom:84px}
 .hero-v4 .eyebrow{margin-bottom:24px}
 .hero-v4 h1{font-size:clamp(40px,4.35vw,62px);line-height:1.07;letter-spacing:-.055em}
 .hero-v4 h1 span{color:var(--red)}
-.hero-v4 .hero-lede{font-size:17px;line-height:1.75;max-width:480px;margin:26px 0 0;color:#5b6773}
-.hero-v4 .hero-lede{margin:22px 0 30px}
+.hero-v4 .hero-lede{font-size:17px;line-height:1.75;max-width:480px;margin:22px 0 30px;color:#5b6773}
 .hero-v4 .actions{gap:12px}
 .hero-v4 .btn{padding:16px 24px}
 .hero-v4 .btn.ghost{background:#fff;color:var(--navy);border-color:#d5dbe2;box-shadow:0 1px 0 #ffffff}
@@ -74,39 +84,38 @@ html{scroll-padding-top:104px}
 .hero-trust{list-style:none;display:flex;gap:24px;flex-wrap:wrap;padding:0;margin:30px 0 0;font-size:11px;color:#5b6773}
 .hero-trust li{display:flex;align-items:center;gap:8px}
 .hero-trust .icon{color:var(--red);font-size:10px}
-.hero-panel{position:relative;background:linear-gradient(158deg,#1a2c40 0%,#101d2b 62%);color:#fff;border-radius:12px;padding:30px 30px 26px;box-shadow:0 34px 70px -34px rgba(17,31,48,.6);overflow:hidden}
-.hero-panel:before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--red),#f38288 55%,rgba(243,130,136,0) 100%)}
-.hero-panel:after{content:"";position:absolute;right:-70px;top:-70px;width:220px;height:220px;border-radius:50%;border:1px solid #ffffff14;pointer-events:none}
-.hero-panel-head{display:flex;align-items:center;gap:14px;padding-bottom:20px;border-bottom:1px solid #ffffff1f}
-.hero-panel-badge{background:#fff;border-radius:5px;padding:7px 10px;display:flex;flex-shrink:0}
-.hero-panel-badge img{width:66px;height:38px;object-fit:contain}
-.hero-panel-head p{margin:0;font-size:10px;line-height:1.55;color:#a9b6c4;letter-spacing:.05em;text-transform:uppercase}
-.hero-panel-head strong{display:block;color:#fff;font-size:12px;letter-spacing:.09em}
-.hero-stats{display:flex;gap:34px;padding:22px 0 20px}
-.hero-stat strong{display:block;font:750 34px/1 Manrope,sans-serif;letter-spacing:-.05em;color:#fff}
-.hero-stat strong em{color:#f38288;font-style:normal;font-size:22px;margin-left:2px}
-.hero-stat span{display:block;margin-top:7px;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:#93a2b1}
-.hp-office{display:flex;align-items:center;gap:13px;padding:14px;margin:0 -14px;border-top:1px solid #ffffff14;border-radius:6px;transition:background .18s}
-.hp-office:hover{background:#ffffff0d}
-.hp-office-info{display:flex;align-items:center;gap:13px;min-width:0;flex:1;color:inherit}
-.hp-office-info:hover .hp-office-txt small{color:#cfd8e2}
-.hp-pin{width:34px;height:34px;border-radius:50%;background:#ffffff12;color:#f38288;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
-.hp-office-txt{min-width:0;line-height:1.4}
-.hp-office-txt strong{display:block;font-size:14px;color:#fff;letter-spacing:-.01em}
-.hp-office-txt small{display:block;font-size:11px;color:#9fadbb;margin-top:3px}
-.hp-tel{margin-left:auto;font-size:12.5px;font-weight:650;color:#fff;white-space:nowrap;transition:color .2s}
-.hp-tel:hover{color:#f38288}
-.hero-panel-foot{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-top:16px;padding-top:18px;border-top:1px solid #ffffff1f}
-.hero-panel-foot span{display:flex;align-items:center;gap:7px;font-size:10px;letter-spacing:.03em;color:#93a2b1}
-.hero-panel-foot span .icon{color:#f38288;font-size:10px}
-.hero-panel-foot a{display:inline-flex;align-items:center;gap:9px;background:var(--red);color:#fff;font-size:11px;font-weight:650;padding:10px 14px;border-radius:5px;white-space:nowrap;transition:.2s}
-.hero-panel-foot a:hover{background:#be252d;color:#fff}
-.hero-panel-foot a .icon{font-size:10px}
+.hero-slider{width:100%;max-width:540px;margin-left:auto}
+.hero-slider-frame{position:relative;padding:12px 12px 14px;background:#e9ecf0;border-radius:14px;border:1px solid #dde2e8}
+.hero-slider-frame::before{content:"";position:absolute;top:20px;right:-12px;bottom:-10px;left:24px;background:#dfe5ea;border-radius:12px;z-index:0}
+.hero-slider-viewport{position:relative;z-index:1;border-radius:11px;overflow:hidden;background:#c5cdd6;box-shadow:0 24px 48px -28px rgba(17,31,48,.45)}
+.hero-slider-track{position:relative;min-height:430px}
+.hero-slide{position:absolute;inset:0;opacity:0;visibility:hidden;pointer-events:none;transform:translateX(20px);transition:opacity .48s ease,transform .48s ease,visibility 0s linear .48s}
+.hero-slide.is-active{position:relative;opacity:1;visibility:visible;pointer-events:auto;transform:translateX(0);transition:opacity .48s ease,transform .48s ease}
+.hero-slide-media{position:relative;background:#fff;padding:10px 10px 0;border-radius:8px 8px 0 0}
+.hero-slide-photo{width:100%;height:400px;object-fit:cover;display:block;border-radius:6px;background:#e8edf2}
+.hero-slide-photo--koscierzyna{object-position:52% 18%}
+.hero-slide-photo--bytow{object-position:center 36%}
+.hero-since-badge{position:absolute;top:22px;left:22px;z-index:2;background:#fff;padding:11px 15px;border-radius:6px;box-shadow:0 10px 30px -8px rgba(17,31,48,.3);font:750 16px/1.15 Manrope,sans-serif;color:var(--navy);letter-spacing:-.04em}
+.hero-office-card{position:absolute;left:20px;bottom:20px;z-index:2;max-width:min(92%,320px);background:#fff;border-radius:8px;padding:15px 16px 14px;box-shadow:0 18px 42px -16px rgba(17,31,48,.42);display:grid;grid-template-columns:auto 1fr;gap:10px 12px;align-items:start}
+.hero-office-pin{width:36px;height:36px;border-radius:50%;background:#fcf0f0;color:var(--red);display:flex;align-items:center;justify-content:center;font-size:14px}
+.hero-office-card strong{display:block;font-size:15px;color:var(--navy);letter-spacing:-.02em}
+.hero-office-meta{margin:4px 0 0;font-size:11px;line-height:1.55;color:var(--muted)}
+.hero-office-tel{display:inline-block;margin-top:9px;font-size:14px;font-weight:650;color:var(--navy)}
+.hero-office-cta{grid-column:1/-1;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 14px;background:var(--red);color:#fff;font-size:11px;font-weight:650;border-radius:5px;margin-top:2px}
+.hero-office-cta:hover{background:#be252d;color:#fff}
+.hero-office-cta .icon{font-size:10px}
+.hero-slider:focus{outline:2px solid var(--red);outline-offset:4px}
+.hero-slider-prev,.hero-slider-next{position:absolute;top:50%;transform:translateY(-50%);z-index:4;width:42px;height:42px;border-radius:50%;border:1px solid #e3e8ed;background:#fff;color:var(--navy);display:flex;align-items:center;justify-content:center;font-size:11px;box-shadow:0 8px 22px -10px rgba(17,31,48,.4);transition:.2s}
+.hero-slider-prev:hover,.hero-slider-next:hover{color:var(--red);border-color:#e7b4b7}
+.hero-slider-prev{left:14px}
+.hero-slider-next{right:14px}
+.hero-slider-count{position:absolute;right:18px;bottom:18px;z-index:4;margin:0;padding:8px 12px;border-radius:999px;background:rgba(17,31,48,.62);backdrop-filter:blur(6px);font:650 11px/1 Manrope,sans-serif;letter-spacing:.16em;color:#fff}
 @media(max-width:1180px){.site-header .links{gap:18px;font-size:12.5px}.site-header .nav-phone span{display:none}.site-header .nav-phone{border:1px solid var(--line);border-radius:4px;padding:9px 11px}.site-header .nav-actions{gap:14px}.site-header .nav-cta{padding:12px 15px;font-size:11px}}
 @media(max-width:980px){.site-header .links{display:none;position:absolute;top:84px;left:0;right:0;background:#fff;padding:22px;box-shadow:0 20px 30px #0001;flex-direction:column;align-items:flex-start;gap:20px}.site-header .links.open{display:flex}.site-header .menu{display:block;font-size:11px;padding:7px 8px}.site-header .nav-actions{margin-left:auto}.site-header .nav-cta{display:none}}
-@media(max-width:1000px){.hero-v4-grid{gap:38px;padding-top:56px;padding-bottom:62px}.hero-v4 .hero-lede{font-size:15px}.hero-panel{padding:24px 22px}}
-@media(max-width:980px){.hero-v4-grid{grid-template-columns:1fr;gap:32px;padding-top:52px;padding-bottom:56px}.hero-v4 h1{font-size:clamp(38px,6.4vw,54px)}.hero-v4 .hero-lede{max-width:560px}.hero-panel{max-width:560px}}
-@media(max-width:760px){.site-header .nav{height:74px;gap:10px}.site-header .nav-phone span{display:none}.site-header .nav-phone{border:1px solid var(--line);border-radius:4px;padding:9px 11px}.site-header .nav-cta{display:none}.site-header .links{top:74px}.hero-v4-grid{grid-template-columns:1fr;gap:34px;padding-top:44px;padding-bottom:48px}.hero-v4 h1{font-size:clamp(32px,9.4vw,43px)}.hero-v4 .hero-lede{font-size:15px}.hero-trust{gap:14px}.hero-stats{gap:26px}.hero-v4 .actions{flex-direction:column;align-items:stretch;gap:10px}.hero-v4 .actions .btn{width:100%;justify-content:center}.hero-panel{padding:22px}.hp-office{padding:13px 10px;margin:0 -10px}.hp-tel{font-size:12px}.hero-panel-foot span{font-size:9px}}
+@media(max-width:1000px){.hero-v4-grid{gap:38px;padding-top:56px;padding-bottom:62px}.hero-v4 .hero-lede{font-size:15px}.hero-slide-photo{height:360px}.hero-slider-track{min-height:390px}.hero-slider{max-width:560px;margin:0 auto}}
+@media(max-width:980px){.hero-v4-grid{grid-template-columns:1fr;gap:32px;padding-top:52px;padding-bottom:56px}.hero-v4 h1{font-size:clamp(38px,6.4vw,54px)}.hero-v4 .hero-lede{max-width:560px}}
+@media(max-width:760px){.site-header .nav{height:74px;gap:10px}.site-header .nav-phone span{display:none}.site-header .nav-phone{border:1px solid var(--line);border-radius:4px;padding:9px 11px}.site-header .nav-cta{display:none}.site-header .links{top:74px}.hero-v4-grid{grid-template-columns:1fr;gap:34px;padding-top:44px;padding-bottom:48px}.hero-v4 h1{font-size:clamp(32px,9.4vw,43px)}.hero-v4 .hero-lede{font-size:15px}.hero-trust{gap:14px}.hero-v4 .actions{flex-direction:column;align-items:stretch;gap:10px}.hero-v4 .actions .btn{width:100%;justify-content:center}.hero-slide-photo{height:290px}.hero-slider-track{min-height:320px}.hero-office-card{left:14px;right:14px;bottom:14px;max-width:none}.hero-slider-count{top:14px;bottom:auto;right:14px}.hero-slider-prev{left:10px}.hero-slider-next{right:10px}}
+@media(prefers-reduced-motion:reduce){.hero-slide{transition:none;transform:none}}
 '''
 (A/'style.css').write_text(basecss+css)
 # Replace previous home-made SVG icons everywhere, including inherited reusable sections.
@@ -134,9 +143,16 @@ def media():
  return '<section class="section" id="filmy"><div class="wrap"><div class="section-head"><div><p class="eyebrow">POZNAJ NAS BLIŻEJ</p><h2>Zobacz, gdzie<br>możemy się spotkać.</h2></div><p>Zobacz nasze materiały.<br>Poznaj nas i zajrzyj do biura.</p></div><div class="media-grid"><article class="media-card"><div class="video-box"><button type="button" class="video-cover youtube-cover" data-video="Widq3rIQm-Q" aria-label="Odtwórz film z kanału YouTube"><img src="/assets/bytow.webp" width="570" height="502" loading="lazy" decoding="async" alt="Biuro 8699.pl w Bytowie — kadr z filmu"><span class="play-ring">'+icon('play')+'</span></button></div><div class="video-caption"><h3>8699.pl — poznaj nas w filmie</h3><p>Zobacz nasz materiał na kanale YouTube.</p><a class="text-link" target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=Widq3rIQm-Q">Otwórz w YouTube '+icon('arrow')+'</a></div></article><article class="media-card"><div class="video-box"><button type="button" class="video-cover" data-local-video="/assets/video/8699-film.mp4" data-poster="/assets/video/8699-poster.webp" data-title="Film o biurze 8699.pl w Kościerzynie" aria-label="Odtwórz film o biurze w Kościerzynie"><img src="/assets/koscierzyna.webp" width="573" height="501" loading="lazy" decoding="async" alt="Biuro 8699.pl w Kościerzynie przy ul. Szopińskiego 1/3 — kadr z filmu"><span class="play-ring">'+icon('play')+'</span></button></div><div class="video-caption"><h3>Biuro w Kościerzynie</h3><p>Zajrzyj do środka — materiał z ul. Szopińskiego 1/3.</p><a class="text-link" href="/ubezpieczenia-koscierzyna/">Poznaj biuro i dojazd '+icon('arrow')+'</a></div></article></div></div></section>'
 def standard():return '<section class="standard-section"><div class="wrap standard-inner"><img src="/assets/hestia.webp" width="85" height="50" alt="ERGO Hestia"><h2>'+STANDARD+'</h2><p>Dwa biura, jeden zespół.<br>Zapraszamy na rozmowę.</p></div></section>'
 MAPS=B['maps']
-def hero_office(slug,name,addr,hours,tel,email=''):
- return f'<div class="hp-office"><a class="hp-office-info" href="{MAPS[slug]}" target="_blank" rel="noopener" aria-label="Biuro {name}, ul. {addr} — otwórz w Google Maps"><span class="hp-pin">{icon("pin")}</span><span class="hp-office-txt"><strong>{name}</strong><small>ul. {addr} · {hours}</small></span></a><a class="hp-tel" href="tel:+48{tel.replace(" ","")}" aria-label="Zadzwoń do biura w {name}: {tel}">{tel}</a></div>'
-hero='<section class="hero-v4"><div class="wrap hero-v4-grid"><div class="hero-v4-copy"><p class="eyebrow">DORADCY ERGO HESTII</p><h1>Ubezpieczenia.<br><span>Kościerzyna i Bytów.</span></h1><p class="hero-lede">Twój dom, samochód, firma i bliscy. Porozmawiajmy o ochronie tego, co ważne — po ludzku, na miejscu lub zdalnie.</p><div class="actions"><a class="btn" href="/kontakt/">Porozmawiaj z doradcą '+icon('arrow')+'</a><a class="btn ghost" href="/oferta/">Poznaj ofertę</a></div><ul class="hero-trust"><li>'+icon('check')+'Doradca, nie infolinia</li><li>'+icon('check')+'Dwa lokalne biura</li><li>'+icon('check')+'Obsługa w biurze i zdalnie</li></ul></div><aside class="hero-panel" aria-label="Dane kontaktowe biur 8699.pl"><div class="hero-panel-head"><span class="hero-panel-badge"><img src="/assets/hestia.webp" width="66" height="38" alt="ERGO Hestia"></span><p>Doradca<strong>Ergo Hestii</strong></p></div><div class="hero-stats"><div class="hero-stat"><strong>'+str(datetime.date.today().year-2001)+'<em>lat</em></strong><span>na rynku od 2001 roku</span></div><div class="hero-stat"><strong>2<em>biura</em></strong><span>Kościerzyna · Bytów</span></div></div>'+''.join(hero_office(*o) for o in offices)+'<div class="hero-panel-foot"><span>'+icon('clock')+'Pon.–pt. 8:00–16:30</span><a href="tel:+48586808712">Zadzwoń teraz '+icon('arrow')+'</a></div></aside></div></section>'
+def hero_slide(index,total,slug,name,addr,hours,tel):
+ active=' is-active' if index==1 else ''
+ hidden='' if index==1 else ' aria-hidden="true"'
+ aria=html.escape(f'{index} z {total}: Biuro {name}')
+ img_attr='fetchpriority="high" decoding="async"' if index==1 else 'loading="lazy" decoding="async"'
+ tel_href='tel:+48'+tel.replace(' ','')
+ card=f'<div class="hero-office-card"><span class="hero-office-pin">{icon("pin")}</span><div><strong>{name}</strong><p class="hero-office-meta">ul. {addr} · Pon.–pt. {hours}</p><a class="hero-office-tel" href="{tel_href}">{tel}</a></div><a class="hero-office-cta" href="{tel_href}">Zadzwoń {icon("phone")}</a></div>'
+ return f'<article class="hero-slide{active}" role="group" aria-roledescription="slajd" aria-label="{aria}"{hidden}><div class="hero-slide-media"><img class="hero-slide-photo hero-slide-photo--{slug}" src="/assets/{slug}.webp" width="570" height="502" alt="Biuro 8699.pl w {name} przy ul. {addr}" {img_attr}><span class="hero-since-badge">Od 2001.</span>{card}</div></article>'
+slides=''.join(hero_slide(i+1,len(offices),*o[:5]) for i,o in enumerate(offices))
+hero='<section class="hero-v4"><div class="wrap hero-v4-grid"><div class="hero-v4-copy"><p class="eyebrow">DORADCY ERGO HESTII</p><h1>Ubezpieczenia.<br><span>Kościerzyna i Bytów.</span></h1><p class="hero-lede">Twój dom, samochód, firma i bliscy. Porozmawiajmy o ochronie tego, co ważne — po ludzku, na miejscu lub zdalnie.</p><div class="actions"><a class="btn" href="/kontakt/">Porozmawiaj z doradcą '+icon('arrow')+'</a><a class="btn ghost" href="/oferta/">Poznaj ofertę</a></div><ul class="hero-trust"><li>'+icon('check')+'Doradca, nie infolinia</li><li>'+icon('check')+'Dwa lokalne biura</li><li>'+icon('check')+'Obsługa w biurze i zdalnie</li></ul></div><div class="hero-slider" data-hero-slider tabindex="0" role="region" aria-roledescription="karuzela" aria-label="Biura 8699.pl w Kościerzynie i Bytowie"><div class="hero-slider-frame"><div class="hero-slider-viewport"><div class="hero-slider-track">'+slides+'</div><button type="button" class="hero-slider-prev" aria-label="Poprzednie biuro">'+icon('left')+'</button><button type="button" class="hero-slider-next" aria-label="Następne biuro">'+icon('right')+'</button><p class="hero-slider-count" aria-live="polite">01 / 02</p></div></div></div></div></section>'
 def faqblock(questions):return '<section class="page-faq"><h2>Najczęściej zadawane pytania</h2>'+''.join('<details><summary>'+q+'</summary><p>'+a+'</p></details>' for q,a in questions)+'</section>'
 def related(current):return '<div class="related"><p class="eyebrow">POZOSTAŁE UBEZPIECZENIA</p>'+''.join('<a href="/'+s[0]+'/">'+s[2]+' '+icon('arrow')+'</a>' for s in services if s[0]!=current)+'</div>'
 def aside(slug=''):return '<aside class="aside"><p class="eyebrow">POROZMAWIAJMY</p><h3>Twój doradca.<br>Twoje biuro.</h3><p>Wybierz dogodną formę kontaktu. Omówimy Twoją sytuację i dostępne możliwości ochrony.</p><a class="btn" href="/kontakt/">Zapytaj o ubezpieczenie '+icon('arrow')+'</a><p><a href="tel:+48586808712">Kościerzyna: 58 680 87 12</a><br><a href="tel:+48598228876">Bytów: 59 822 88 76</a></p>'+related(slug)+'</aside>'
@@ -191,7 +207,7 @@ def write(slug,title,desc,body,questions=None,parent=None,parent_url='/oferta/',
  robots=('index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1' if production else 'noindex,nofollow')
  if production and slug=='prywatnosc':robots='noindex,follow'
  page='<!doctype html><html lang="pl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+html.escape(title)+' | 8699.pl</title><meta name="description" content="'+html.escape(desc,quote=True)+'"><meta name="robots" content="'+robots+'"><meta name="author" content="8699.pl"><link rel="canonical" href="'+canonical+'"><link rel="alternate" hreflang="pl" href="'+canonical+'"><meta property="og:type" content="website"><meta property="og:site_name" content="8699.pl"><meta property="og:locale" content="pl_PL"><meta property="og:title" content="'+html.escape(title,quote=True)+'"><meta property="og:description" content="'+html.escape(desc,quote=True)+'"><meta property="og:url" content="'+canonical+'"><meta property="og:image" content="'+OG_IMAGE+'"><meta property="og:image:type" content="image/jpeg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="8699.pl — ubezpieczenia w Kościerzynie i Bytowie"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="'+html.escape(title,quote=True)+'"><meta name="twitter:description" content="'+html.escape(desc,quote=True)+'"><meta name="twitter:image" content="'+OG_IMAGE+'"><meta name="theme-color" content="#111f30"><link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'+('<link rel="stylesheet" href="'+FONT_CSS_URL+'">' if FONT_CSS_URL else '')+'<link rel="stylesheet" href="/assets/fonts/fontawesome.min.css"><link rel="stylesheet" href="/assets/style.css"><script defer src="/assets/app.js"></script><script type="application/ld+json">'+json.dumps(schema,ensure_ascii=False)+'</script></head><body><a class="skip-link" href="#main">Przejdź do treści</a>'+h+'<main id="main">'+body+'</main>'+foot+'</body></html>'
- (path/'index.html').write_text(page);pages.append(canonical)
+ page=apply_site_base(page);(path/'index.html').write_text(page);pages.append(canonical)
 content={
 'ubezpieczenia-komunikacyjne':{
 'intro':'Ubezpieczenie samochodu warto dopasować do tego, jak korzystasz z pojazdu. Codzienne dojazdy, dalsze podróże, wiek auta czy oczekiwania wobec pomocy drogowej mogą wpływać na wybór zakresu. W 8699.pl porozmawiasz z doradcą w Kościerzynie lub Bytowie o OC, AC, assistance i NNW.',
@@ -258,6 +274,10 @@ document.querySelectorAll('.youtube-cover').forEach(button=>button.addEventListe
 const track=document.querySelector('.brand-track'),windowEl=document.querySelector('.brand-window');function shiftBrands(direction){if(!track||!windowEl)return;track.style.animation='none';track.style.transform='none';track.classList.add('paused');windowEl.scrollBy({left:direction*300,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});}document.querySelector('.brands-prev')?.addEventListener('click',()=>shiftBrands(-1));document.querySelector('.brands-next')?.addEventListener('click',()=>shiftBrands(1));
 document.querySelectorAll('[data-local-video]').forEach(button=>button.addEventListener('click',()=>{const video=document.createElement('video');video.src=button.dataset.localVideo;if(button.dataset.poster)video.poster=button.dataset.poster;video.controls=true;video.autoplay=true;video.playsInline=true;video.preload='metadata';video.setAttribute('aria-label',button.dataset.title||'Film 8699.pl');button.replaceWith(video);}));
 document.querySelectorAll('[data-contact]').forEach(f=>f.addEventListener('submit',async e=>{e.preventDefault();const status=f.querySelector('.form-status'),button=f.querySelector('button[type=submit]');status.classList.add('visible');if(document.querySelector('meta[name=robots]').content.includes('noindex')){status.textContent='Zadzwoń do biura: Kościerzyna 58 680 87 12, Bytów 59 822 88 76.';return;}button.disabled=true;status.textContent='Wysyłanie…';try{const res=await fetch('/.netlify/functions/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.fromEntries(new FormData(f)))});const data=await res.json();if(!res.ok)throw new Error(data.message||'Nie udało się wysłać wiadomości.');status.textContent='Dziękujemy. Zapytanie zostało wysłane do wybranego biura.';f.reset();}catch(error){status.textContent=error.message+' W razie potrzeby skontaktuj się telefonicznie.';}finally{button.disabled=false;}}));'''
-js += "if(location.pathname==='/oferta/' && location.hash){const routes={firm:'ubezpieczenia-firm',komunikacyjne:'ubezpieczenia-komunikacyjne',domy:'ubezpieczenia-domu-i-mieszkania',zdrowie:'ubezpieczenia-na-zycie-i-zdrowie',sport:'ubezpieczenia-podrozy-i-sportu'};const route=routes[location.hash.slice(1)];if(route)location.replace('/'+route+'/');}"
+js += "const siteBase=document.documentElement.dataset.siteBase||'';const withBase=p=>p.startsWith('/')?siteBase+p:p;if(location.pathname===withBase('/oferta/')&&location.hash){const routes={firm:'ubezpieczenia-firm',komunikacyjne:'ubezpieczenia-komunikacyjne',domy:'ubezpieczenia-domu-i-mieszkania',zdrowie:'ubezpieczenia-na-zycie-i-zdrowie',sport:'ubezpieczenia-podrozy-i-sportu'};const route=routes[location.hash.slice(1)];if(route)location.replace(withBase('/'+route+'/'));}"
+js+="(function(){const root=document.querySelector('[data-hero-slider]');if(!root)return;const slides=[...root.querySelectorAll('.hero-slide')],countEl=root.querySelector('.hero-slider-count'),prev=root.querySelector('.hero-slider-prev'),next=root.querySelector('.hero-slider-next');if(!slides.length)return;let index=slides.findIndex(s=>s.classList.contains('is-active'));if(index<0)index=0;const label=n=>String(n).padStart(2,'0');const sync=()=>{countEl.textContent=label(index+1)+' / '+label(slides.length);};const show=nextIndex=>{if(nextIndex===index||!slides[nextIndex])return;slides[index].classList.remove('is-active');slides[index].setAttribute('aria-hidden','true');index=nextIndex;slides[index].classList.add('is-active');slides[index].removeAttribute('aria-hidden');sync();};const step=delta=>show((index+delta+slides.length)%slides.length);prev?.addEventListener('click',()=>step(-1));next?.addEventListener('click',()=>step(1));root.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'){e.preventDefault();step(-1);}else if(e.key==='ArrowRight'){e.preventDefault();step(1);}});let touchX=null;root.addEventListener('touchstart',e=>{touchX=e.changedTouches[0].clientX;},{passive:true});root.addEventListener('touchend',e=>{if(touchX==null)return;const dx=e.changedTouches[0].clientX-touchX;if(Math.abs(dx)>48)step(dx<0?1:-1);touchX=null;},{passive:true});sync();})();"
+if SITE_BASE:
+ b=SITE_BASE.rstrip('/')
+ js=re.sub(r'="/(assets/[^"]*)"',lambda m:'="'+b+m.group(1)+'"',js)
 (A/'app.js').write_text(js)
 print('V2:',len(pages),'pages;', 'PRODUCTION' if production else 'PRIVATE PREVIEW')

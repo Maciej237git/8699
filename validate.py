@@ -1,8 +1,9 @@
 from pathlib import Path
 from html.parser import HTMLParser
 from urllib.parse import urlsplit
-import json,re,xml.etree.ElementTree as E
+import json,re,xml.etree.ElementTree as E,os
 P=Path(__file__).parent
+SITE_BASE=os.environ.get('SITE_BASE','').strip().rstrip('/')
 for folder,prod in [('dist',False),('dist-production',True)]:
  root=P/folder;titles=[];descs=[];count=0
  class Check(HTMLParser):
@@ -11,10 +12,13 @@ for folder,prod in [('dist',False),('dist-production',True)]:
    a=dict(aa)
    if t=='h1':self.h1+=1
    if a.get('id'):self.ids.add(a['id'])
-   for key in ['href','src','poster']:
+   for key in ['href','src','poster','data-local-video']:
     u=a.get(key,'')
     if u.startswith('/') and not u.startswith('//'):
-     p=root/urlsplit(u).path.lstrip('/')
+     rel=urlsplit(u).path.lstrip('/')
+     if SITE_BASE and (rel==SITE_BASE.lstrip('/') or rel.startswith(SITE_BASE.lstrip('/')+'/')):
+      rel=rel[len(SITE_BASE.lstrip('/')):].lstrip('/')
+     p=root/rel
      assert p.exists(),(folder,u)
   def handle_data(self,d):pass
  for f in root.rglob('index.html'):
