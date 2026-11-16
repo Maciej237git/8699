@@ -36,7 +36,7 @@ for folder,prod in folders:
   for j in re.findall('<script type="application/ld\\+json">(.*?)</script>',s):json.loads(j)
   assert 'rel="canonical"' in s;count+=1
  assert len(titles)==len(set(titles));assert len(descs)==len(set(descs))
- sitemap=E.parse(root/'sitemap.xml');assert len(sitemap.getroot())==13
+ sitemap=E.parse(root/'sitemap.xml');assert len(sitemap.getroot())==16
  for asset in ['assets/og-8699.jpg','assets/favicon.svg']:assert (root/asset).exists(),(folder,asset)
  assert ('Allow: /' if prod else 'Disallow: /') in (root/'robots.txt').read_text()
  print(folder,'PASS:',count,'pages; links/assets; unique metadata; H1; schema JSON; sitemap; indexing')

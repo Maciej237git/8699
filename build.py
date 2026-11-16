@@ -129,6 +129,26 @@ html{scroll-padding-top:92px}
 .about-ergo-partner img{width:86px;height:50px;object-fit:contain;margin:0 auto 12px;display:block}
 .about-ergo-partner-label{display:block;font-size:9px;font-weight:650;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);line-height:1.55;max-width:148px;margin:0 auto}
 @media(max-width:820px){.about-ergo-inner{grid-template-columns:1fr;gap:28px;align-items:start}.about-ergo-partner{max-width:280px;display:flex;align-items:center;gap:16px;text-align:left;padding:16px 18px}.about-ergo-partner img{width:74px;height:42px;margin:0}.about-ergo-partner-label{margin:0;max-width:none;text-align:left}}
+.initiative-index-lede{font-size:15px;line-height:1.85;color:#5b6773;max-width:720px;margin:0 0 36px}
+.initiative-blog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.initiative-card{display:flex;flex-direction:column;height:100%;border:1px solid var(--line);border-radius:6px;background:#fff;overflow:hidden;transition:border-color .2s,box-shadow .2s}
+.initiative-card:hover{border-color:#d5dbe2;box-shadow:0 16px 40px -28px rgba(17,31,48,.35)}
+.initiative-card-photo{display:block;overflow:hidden;background:#e9edf1}
+.initiative-card-photo img{width:100%;aspect-ratio:1.2;object-fit:cover;transition:transform .45s}
+.initiative-card:hover .initiative-card-photo img{transform:scale(1.03)}
+.initiative-card-body{padding:22px 22px 24px;display:flex;flex-direction:column;flex:1}
+.initiative-card-body h2{font-size:18px;letter-spacing:-.03em;margin:0 0 10px;line-height:1.3}
+.initiative-card-body h2 a{color:inherit;text-decoration:none}
+.initiative-card-body h2 a:hover{color:var(--red)}
+.initiative-card-body>p{font-size:13px;line-height:1.7;margin:0 0 16px;flex:1}
+.initiative-card .text-link{margin-top:auto;font-size:12px}
+.initiative-post{max-width:820px;margin:0 auto}
+.initiative-back{display:inline-flex;align-items:center;gap:10px;margin-bottom:28px;font-size:12px}
+.initiative-post-hero{width:100%;max-height:440px;object-fit:cover;border-radius:6px;margin-bottom:28px}
+.initiative-post-title{font-size:clamp(28px,3vw,36px);letter-spacing:-.04em;margin:0 0 22px}
+.initiative-post p{font-size:15px;line-height:1.9}
+@media(max-width:1000px){.initiative-blog-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:760px){.initiative-blog-grid{grid-template-columns:1fr;gap:24px}}
 '''
 (A/'style.css').write_text(basecss+css)
 # Replace previous home-made SVG icons everywhere, including inherited reusable sections.
@@ -200,6 +220,7 @@ def write(slug,title,desc,body,questions=None,parent=None,parent_url='/oferta/',
  desc=clip(desc)
  if slug in content:parent,parent_url='Oferta ubezpieczeń','/oferta/'
  elif slug.startswith('ubezpieczenia-'):parent,parent_url='Kontakt','/kontakt/'
+ elif slug.startswith('nasze-inicjatywy/'):parent,parent_url='Nasze inicjatywy','/nasze-inicjatywy/'
  schema_type=schema_type or {'oferta':'CollectionPage','o-nas':'AboutPage','kontakt':'ContactPage','dokumenty-do-pobrania':'CollectionPage'}.get(slug,'WebPage')
  breadcrumbs=[{'@type':'ListItem','position':1,'name':'Strona główna','item':DOMAIN+'/'}]
  if slug:
@@ -276,8 +297,28 @@ for slug,name,addr,hours,tel,email in offices:
  article='<article class="article"><img class="local-image" src="/assets/'+slug+'.webp" width="573" height="501" loading="lazy" decoding="async" alt="Biuro ubezpieczeń 8699.pl '+name+'"><h2>Lokalne biuro ubezpieczeń — '+name+'</h2><p>'+text[0]+'</p><h2>Kontakt z doradcą</h2><p>'+text[1]+'</p><dl class="office-details"><dt>Adres biura</dt><dd>ul. '+addr+', '+name+'</dd><dt>Godziny otwarcia</dt><dd>Poniedziałek–piątek: '+hours+'</dd><dt>Telefon</dt><dd><a href="tel:+48'+tel.replace(' ','')+'">'+tel+'</a></dd><dt>E-mail</dt><dd><a href="mailto:'+email+'">'+email+'</a></dd></dl><a class="btn navy" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query='+quote('8699.pl '+name+' '+addr)+'">Wyznacz trasę do biura '+icon('pin')+'</a><h2>Co możesz z nami omówić?</h2><p>Przejdź do wybranej kategorii, aby poznać najważniejsze zagadnienia przed rozmową. Ostateczny zakres i warunki ochrony zależą od konkretnego produktu. Jeśli wolisz obsługę zdalną, powiedz o tym doradcy podczas kontaktu.</p>'+related('')+faqblock(qs)+'</article>'
  write('ubezpieczenia-'+slug,'Ubezpieczenia '+name+' — biuro przy ul. '+addr,'8699.pl '+name+', ul. '+addr+'. Telefon '+tel+'. Ubezpieczenia samochodu, domu, życia, firmy i podróży. Godziny: '+hours+'.',crumbs('Ubezpieczenia '+name,'Kontakt','/kontakt/')+'<section class="section"><div class="wrap subgrid">'+article+aside()+'</div></section>'+standard()+contact(),qs)
 write('kontakt','Kontakt — biura 8699.pl w Kościerzynie i Bytowie','Zadzwoń lub napisz do 8699.pl. Kościerzyna: 58 680 87 12. Bytów: 59 822 88 76. Adresy biur, godziny otwarcia i zapytanie o ubezpieczenie.',crumbs('Porozmawiajmy o Twoim ubezpieczeniu')+'<section class="section"><div class="wrap"><div class="section-head"><div><p class="eyebrow">DWA BIURA. BEZPOŚREDNI KONTAKT.</p><h2>Wybierz swoje biuro.</h2></div><p>Zapytaj o ofertę, dokumenty lub swoją polisę. Nie przesyłaj przez formularz danych o zdrowiu, numeru PESEL ani skanów dokumentów.</p></div>'+officecards()+'</div></section>'+contact()+standard())
-initiatives=[('inicjatywa-1','Lokalne inicjatywy','Wspieramy inicjatywy sportowe i kulturalne na zachodnich Kaszubach.'),('inicjatywa-2','Bezpieczeństwo od najmłodszych lat','Materiały edukacyjne łączą sport, zdrowy tryb życia i bezpieczeństwo.'),('inicjatywa-3','Blisko regionalnego sportu','Wspieramy Bytovię Bytów, Kaszubię Kościerzyna i Kaszubię Studzienice.')]
-write('nasze-inicjatywy','Nasze inicjatywy — sport i społeczność zachodnich Kaszub','8699.pl wspiera lokalny sport i inicjatywy społeczne. Poznaj materiały dotyczące Bytovii Bytów, Kaszubii Kościerzyna i działań edukacyjnych.',crumbs('Jesteśmy częścią tej społeczności')+'<section class="section"><div class="wrap article"><p class="eyebrow">BLISKO LUDZI, NIE TYLKO W BIURZE</p><h2>Wspieramy to, co lokalne.</h2><p>Nasza obecność w Kościerzynie i Bytowie to także udział w życiu regionu. Wspieramy lokalny sport, kulturę oraz edukację najmłodszych.</p><div class="initiative-grid">'+''.join('<article><img loading="lazy" decoding="async" src="/assets/'+n+'.webp" alt="'+t+' — materiały 8699.pl"><h3>'+t+'</h3><p>'+d+'</p></article>' for n,t,d in initiatives)+'</div><h2>Sport, edukacja i bezpieczeństwo</h2><p>Wśród wspieranych klubów są Bytovia Bytów, Kaszubia Kościerzyna i Klub Sportowy Kaszubia Studzienice. Z myślą o najmłodszych powstała też książka z ćwiczeniami o zdrowym trybie życia, aktywności sportowej i bezpieczeństwie.</p><p>Skontaktuj się z nami — chętnie odpowiemy na pytania o polisę.</p></div></section>'+contact())
+INITIATIVES=[
+('lokalne-inicjatywy','inicjatywa-1','Lokalne inicjatywy','Wspieramy inicjatywy sportowe i kulturalne na zachodnich Kaszubach.',[
+'Nasza obecność w Kościerzynie i Bytowie to także udział w życiu regionu. Wspieramy lokalny sport, kulturę oraz edukację najmłodszych.',
+]),
+('bezpieczenstwo-od-najmlodszych-lat','inicjatywa-2','Bezpieczeństwo od najmłodszych lat','Materiały edukacyjne łączą sport, zdrowy tryb życia i bezpieczeństwo.',[
+'Z myślą o najmłodszych powstała też książka z ćwiczeniami o zdrowym trybie życia, aktywności sportowej i bezpieczeństwie.',
+]),
+('blisko-regionalnego-sportu','inicjatywa-3','Blisko regionalnego sportu','Wspieramy Bytovię Bytów, Kaszubię Kościerzyna i Kaszubię Studzienice.',[
+'Wśród wspieranych klubów są Bytovia Bytów, Kaszubia Kościerzyna i Klub Sportowy Kaszubia Studzienice.',
+]),
+]
+def initiative_card(slug,asset,title,excerpt):
+ url='/nasze-inicjatywy/'+slug+'/'
+ return '<article class="initiative-card"><a class="initiative-card-photo" href="'+url+'"><img loading="lazy" decoding="async" src="/assets/'+asset+'.webp" width="570" height="475" alt="'+html.escape(title)+' — materiały 8699.pl"></a><div class="initiative-card-body"><h2><a href="'+url+'">'+title+'</a></h2><p>'+excerpt+'</p><a class="text-link" href="'+url+'">Czytaj więcej '+icon('arrow')+'</a></div></article>'
+def initiatives_blog_grid():
+ return '<div class="initiative-blog-grid">'+''.join(initiative_card(*i[:4]) for i in INITIATIVES)+'</div>'
+def initiative_post_body(asset,title,paragraphs):
+ paras=''.join('<p>'+p+'</p>' for p in paragraphs)
+ return '<section class="section"><div class="wrap"><article class="initiative-post article"><a class="text-link initiative-back" href="/nasze-inicjatywy/">Wróć do inicjatyw '+icon('left')+'</a><img class="initiative-post-hero" src="/assets/'+asset+'.webp" width="820" height="480" loading="lazy" decoding="async" alt="'+html.escape(title)+' — materiały 8699.pl"><h2 class="initiative-post-title">'+title+'</h2>'+paras+'</article></div></section>'
+write('nasze-inicjatywy','Nasze inicjatywy — sport i społeczność zachodnich Kaszub','8699.pl wspiera lokalny sport i inicjatywy społeczne. Poznaj materiały dotyczące Bytovii Bytów, Kaszubii Kościerzyna i działań edukacyjnych.',crumbs('Jesteśmy częścią tej społeczności')+'<section class="section"><div class="wrap"><p class="eyebrow">BLISKO LUDZI, NIE TYLKO W BIURZE</p><p class="initiative-index-lede">Nasza obecność w Kościerzynie i Bytowie to także udział w życiu regionu. Wspieramy lokalny sport, kulturę oraz edukację najmłodszych.</p>'+initiatives_blog_grid()+'</div></section>'+contact())
+for slug,asset,title,excerpt,paragraphs in INITIATIVES:
+ write('nasze-inicjatywy/'+slug,title+' — nasze inicjatywy',excerpt,crumbs(title,'Nasze inicjatywy','/nasze-inicjatywy/')+initiative_post_body(asset,title,paragraphs)+contact())
 # Link to real existing documents; do not invent downloads or reproduce stale health questionnaires.
 docgroups=[('Wypowiedzenia OC',[('Wypowiedzenie OC — art. 28','2021/09/wypowiedzenie-dokuemnt.odt','ODT'),('Wypowiedzenie OC nabywcy — art. 31','2021/09/wypowiedzenie-oc-nabywcy-dokument.odt','ODT'),('Wypowiedzenie OC — art. 28a','2021/10/Wypowiedzenie-OC-art.28a-na-strone.odt','ODT')]),('Dokumenty Warta',[('Oświadczenie majątkowe — załącznik B','2021/09/Zalacznik_B_Oswiadczenie_majatkowe.doc','DOC'),('Dane o działalności — załącznik A','2021/09/Zalacznik_A_Dane_o_dzialalnosci_Wnioskodawcy.doc','DOC'),('Wykaz dokumentów','2021/09/Wykaz_dokumentow.odt','ODT'),('Wniosek o udzielenie gwarancji','2021/09/Wniosek_o_udzielenie_gwarancji.doc','DOC')]),('Dokumenty Ergo Hestia',[('Uproszczony bilans','2021/09/uproszczony_bilans.xls','XLS'),('Wniosek o gwarancję kontraktową','2021/09/WNIOSEK_gw_kontraktowa.doc','DOC'),('Wykaz dokumentów do gwarancji','2021/09/Wykaz_dokumentow_do-_gwarancji.doc','DOC'),('Oświadczenie o stanie majątkowym','2021/09/zal_48_oswiadczenie-o-stanie-majatkowym-1.doc','DOC')])]
 docs='<div class="doc-categories">'+''.join('<section class="document-group"><h2>'+group+'</h2>'+''.join('<a class="document-link" href="/assets/documents/'+path.split('/')[-1]+'" target="_blank" rel="noopener">'+icon('file')+'<span>'+label+'<small>Plik '+ext+'</small></span><span class="download">Otwórz '+icon('arrow')+'</span></a>' for label,path,ext in files)+'</section>' for group,files in docgroups)+'</div>'
