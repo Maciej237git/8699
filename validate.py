@@ -4,7 +4,9 @@ from urllib.parse import urlsplit
 import json,re,xml.etree.ElementTree as E,os
 P=Path(__file__).parent
 SITE_BASE=os.environ.get('SITE_BASE','').strip().rstrip('/')
-for folder,prod in [('dist',False),('dist-production',True)]:
+folders=[('dist',False)]
+if (P/'dist-production'/'sitemap.xml').exists():folders.append(('dist-production',True))
+for folder,prod in folders:
  root=P/folder;titles=[];descs=[];count=0
  class Check(HTMLParser):
   def __init__(self):super().__init__();self.h1=0;self.ids=set();self.links=[]
