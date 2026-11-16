@@ -84,37 +84,40 @@ html{scroll-padding-top:104px}
 .hero-trust{list-style:none;display:flex;gap:24px;flex-wrap:wrap;padding:0;margin:30px 0 0;font-size:11px;color:#5b6773}
 .hero-trust li{display:flex;align-items:center;gap:8px}
 .hero-trust .icon{color:var(--red);font-size:10px}
-.hero-slider{width:100%;max-width:540px;margin-left:auto}
-.hero-slider-frame{position:relative;padding:12px 12px 14px;background:#e9ecf0;border-radius:14px;border:1px solid #dde2e8}
-.hero-slider-frame::before{content:"";position:absolute;top:20px;right:-12px;bottom:-10px;left:24px;background:#dfe5ea;border-radius:12px;z-index:0}
-.hero-slider-viewport{position:relative;z-index:1;border-radius:11px;overflow:hidden;background:#c5cdd6;box-shadow:0 24px 48px -28px rgba(17,31,48,.45)}
-.hero-slider-track{position:relative;min-height:430px}
+.hero-slider{width:100%;max-width:520px;margin-left:auto;padding:18px 0 28px 32px}
+.hero-slider-frame{position:relative}
+.hero-slider-frame::before{content:"";position:absolute;top:28px;right:8px;bottom:-14px;left:-18px;background:#e3e8ed;border-radius:12px;z-index:0;opacity:.92}
+.hero-slider-viewport{position:relative;z-index:1}
+.hero-slider-track{position:relative;min-height:420px}
 .hero-slide{position:absolute;inset:0;opacity:0;visibility:hidden;pointer-events:none;transform:translateX(20px);transition:opacity .48s ease,transform .48s ease,visibility 0s linear .48s}
 .hero-slide.is-active{position:relative;opacity:1;visibility:visible;pointer-events:auto;transform:translateX(0);transition:opacity .48s ease,transform .48s ease}
-.hero-slide-media{position:relative;background:#fff;padding:10px 10px 0;border-radius:8px 8px 0 0}
-.hero-slide-photo{width:100%;height:400px;object-fit:cover;display:block;border-radius:6px;background:#e8edf2}
+.hero-slide-stage{position:relative;box-shadow:0 26px 50px -30px rgba(17,31,48,.45)}
+.hero-slide-photo{width:100%;height:400px;object-fit:cover;display:block;border-radius:8px;background:#e8edf2}
 .hero-slide-photo--koscierzyna{object-position:52% 18%}
 .hero-slide-photo--bytow{object-position:center 36%}
-.hero-since-badge{position:absolute;top:22px;left:22px;z-index:2;background:#fff;padding:11px 15px;border-radius:6px;box-shadow:0 10px 30px -8px rgba(17,31,48,.3);font:750 16px/1.15 Manrope,sans-serif;color:var(--navy);letter-spacing:-.04em}
-.hero-office-card{position:absolute;left:20px;bottom:20px;z-index:2;max-width:min(92%,320px);background:#fff;border-radius:8px;padding:15px 16px 14px;box-shadow:0 18px 42px -16px rgba(17,31,48,.42);display:grid;grid-template-columns:auto 1fr;gap:10px 12px;align-items:start}
-.hero-office-pin{width:36px;height:36px;border-radius:50%;background:#fcf0f0;color:var(--red);display:flex;align-items:center;justify-content:center;font-size:14px}
+.hero-since-badge{position:absolute;top:-12px;left:-22px;z-index:3;background:var(--navy);color:#fff;padding:12px 16px 11px;border-radius:6px;box-shadow:0 14px 34px -12px rgba(17,31,48,.55);min-width:148px}
+.hero-since-badge strong{display:block;font:750 17px/1.1 Manrope,sans-serif;letter-spacing:-.04em;color:#fff}
+.hero-since-badge small{display:block;margin-top:5px;font:650 8px/1.35 'DM Sans',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#b9c5d2}
+.hero-office-card{position:absolute;left:-26px;bottom:-18px;z-index:3;width:min(88%,300px);background:#fff;border-radius:8px;padding:14px 16px 12px;box-shadow:0 20px 44px -16px rgba(17,31,48,.45)}
+.hero-office-card-top{display:flex;gap:11px;align-items:flex-start}
+.hero-office-pin{width:34px;height:34px;border-radius:50%;background:#fcf0f0;color:var(--red);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;margin-top:2px}
 .hero-office-card strong{display:block;font-size:15px;color:var(--navy);letter-spacing:-.02em}
-.hero-office-meta{margin:4px 0 0;font-size:11px;line-height:1.55;color:var(--muted)}
-.hero-office-tel{display:inline-block;margin-top:9px;font-size:14px;font-weight:650;color:var(--navy)}
-.hero-office-cta{grid-column:1/-1;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 14px;background:var(--red);color:#fff;font-size:11px;font-weight:650;border-radius:5px;margin-top:2px}
-.hero-office-cta:hover{background:#be252d;color:#fff}
-.hero-office-cta .icon{font-size:10px}
+.hero-office-meta{margin:4px 0 0;font-size:11px;line-height:1.5;color:var(--muted);text-wrap:pretty}
+.hero-office-card-foot{margin-top:12px;padding-top:10px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.hero-office-tel{font-size:14px;font-weight:650;color:var(--navy);white-space:nowrap}
+.hero-office-call{font-size:11px;font-weight:650;color:var(--red);display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.hero-office-call:hover{color:#be252d}
+.hero-office-call .icon{font-size:10px}
 .hero-slider:focus{outline:2px solid var(--red);outline-offset:4px}
-.hero-slider-prev,.hero-slider-next{position:absolute;top:50%;transform:translateY(-50%);z-index:4;width:42px;height:42px;border-radius:50%;border:1px solid #e3e8ed;background:#fff;color:var(--navy);display:flex;align-items:center;justify-content:center;font-size:11px;box-shadow:0 8px 22px -10px rgba(17,31,48,.4);transition:.2s}
+.hero-slider-controls{position:absolute;right:14px;bottom:14px;z-index:4;display:flex;align-items:center;gap:8px}
+.hero-slider-prev,.hero-slider-next{position:static;transform:none;width:38px;height:38px;border-radius:50%;border:1px solid #e3e8ed;background:#fff;color:var(--navy);display:flex;align-items:center;justify-content:center;font-size:10px;box-shadow:0 8px 22px -12px rgba(17,31,48,.35);transition:.2s;flex-shrink:0}
 .hero-slider-prev:hover,.hero-slider-next:hover{color:var(--red);border-color:#e7b4b7}
-.hero-slider-prev{left:14px}
-.hero-slider-next{right:14px}
-.hero-slider-count{position:absolute;right:18px;bottom:18px;z-index:4;margin:0;padding:8px 12px;border-radius:999px;background:rgba(17,31,48,.62);backdrop-filter:blur(6px);font:650 11px/1 Manrope,sans-serif;letter-spacing:.16em;color:#fff}
+.hero-slider-count{margin:0;padding:0 2px;font:650 11px/1 Manrope,sans-serif;letter-spacing:.14em;color:#fff;text-shadow:0 1px 10px rgba(17,31,48,.65);min-width:52px;text-align:center}
 @media(max-width:1180px){.site-header .links{gap:18px;font-size:12.5px}.site-header .nav-phone span{display:none}.site-header .nav-phone{border:1px solid var(--line);border-radius:4px;padding:9px 11px}.site-header .nav-actions{gap:14px}.site-header .nav-cta{padding:12px 15px;font-size:11px}}
 @media(max-width:980px){.site-header .links{display:none;position:absolute;top:84px;left:0;right:0;background:#fff;padding:22px;box-shadow:0 20px 30px #0001;flex-direction:column;align-items:flex-start;gap:20px}.site-header .links.open{display:flex}.site-header .menu{display:block;font-size:11px;padding:7px 8px}.site-header .nav-actions{margin-left:auto}.site-header .nav-cta{display:none}}
-@media(max-width:1000px){.hero-v4-grid{gap:38px;padding-top:56px;padding-bottom:62px}.hero-v4 .hero-lede{font-size:15px}.hero-slide-photo{height:360px}.hero-slider-track{min-height:390px}.hero-slider{max-width:560px;margin:0 auto}}
+@media(max-width:1000px){.hero-v4-grid{gap:38px;padding-top:56px;padding-bottom:62px}.hero-v4 .hero-lede{font-size:15px}.hero-slide-photo{height:360px}.hero-slider-track{min-height:390px}.hero-slider{max-width:min(100%,520px);margin:0 auto;padding-left:28px}}
 @media(max-width:980px){.hero-v4-grid{grid-template-columns:1fr;gap:32px;padding-top:52px;padding-bottom:56px}.hero-v4 h1{font-size:clamp(38px,6.4vw,54px)}.hero-v4 .hero-lede{max-width:560px}}
-@media(max-width:760px){.site-header .nav{height:74px;gap:10px}.site-header .nav-phone span{display:none}.site-header .nav-phone{border:1px solid var(--line);border-radius:4px;padding:9px 11px}.site-header .nav-cta{display:none}.site-header .links{top:74px}.hero-v4-grid{grid-template-columns:1fr;gap:34px;padding-top:44px;padding-bottom:48px}.hero-v4 h1{font-size:clamp(32px,9.4vw,43px)}.hero-v4 .hero-lede{font-size:15px}.hero-trust{gap:14px}.hero-v4 .actions{flex-direction:column;align-items:stretch;gap:10px}.hero-v4 .actions .btn{width:100%;justify-content:center}.hero-slide-photo{height:290px}.hero-slider-track{min-height:320px}.hero-office-card{left:14px;right:14px;bottom:14px;max-width:none}.hero-slider-count{top:14px;bottom:auto;right:14px}.hero-slider-prev{left:10px}.hero-slider-next{right:10px}}
+@media(max-width:760px){.site-header .nav{height:74px;gap:10px}.site-header .nav-phone span{display:none}.site-header .nav-phone{border:1px solid var(--line);border-radius:4px;padding:9px 11px}.site-header .nav-cta{display:none}.site-header .links{top:74px}.hero-v4{position:relative;z-index:1;padding-bottom:28px}.hero-v4-grid{grid-template-columns:1fr;gap:34px;padding-top:44px;padding-bottom:56px}.hero-v4 h1{font-size:clamp(32px,9.4vw,43px)}.hero-v4 .hero-lede{font-size:15px}.hero-trust{gap:14px}.hero-v4 .actions{flex-direction:column;align-items:stretch;gap:10px}.hero-v4 .actions .btn{width:100%;justify-content:center}.hero-slider{padding:16px 8px 36px 22px}.hero-slide-photo{height:min(58vw,290px)}.hero-slider-track{min-height:calc(min(58vw,290px) + 96px)}.hero-since-badge{left:-14px;top:-10px;padding:10px 13px;min-width:132px}.hero-since-badge strong{font-size:15px}.hero-office-card{left:-16px;bottom:-14px;width:calc(100% - 8px);max-width:none;padding:12px 14px}.hero-office-meta{font-size:10px;line-height:1.45}.hero-office-card-foot{gap:8px}.hero-slider-controls{top:12px;right:10px;bottom:auto;padding:4px 6px;border-radius:999px;background:rgba(17,31,48,.38);backdrop-filter:blur(6px)}.hero-slider-count{color:#fff;text-shadow:none}.mobile-call{bottom:18px;right:16px;z-index:2}}
 @media(prefers-reduced-motion:reduce){.hero-slide{transition:none;transform:none}}
 '''
 (A/'style.css').write_text(basecss+css)
@@ -149,10 +152,12 @@ def hero_slide(index,total,slug,name,addr,hours,tel):
  aria=html.escape(f'{index} z {total}: Biuro {name}')
  img_attr='fetchpriority="high" decoding="async"' if index==1 else 'loading="lazy" decoding="async"'
  tel_href='tel:+48'+tel.replace(' ','')
- card=f'<div class="hero-office-card"><span class="hero-office-pin">{icon("pin")}</span><div><strong>{name}</strong><p class="hero-office-meta">ul. {addr} · Pon.–pt. {hours}</p><a class="hero-office-tel" href="{tel_href}">{tel}</a></div><a class="hero-office-cta" href="{tel_href}">Zadzwoń {icon("phone")}</a></div>'
- return f'<article class="hero-slide{active}" role="group" aria-roledescription="slajd" aria-label="{aria}"{hidden}><div class="hero-slide-media"><img class="hero-slide-photo hero-slide-photo--{slug}" src="/assets/{slug}.webp" width="570" height="502" alt="Biuro 8699.pl w {name} przy ul. {addr}" {img_attr}><span class="hero-since-badge">Od 2001.</span>{card}</div></article>'
+ badge='<span class="hero-since-badge"><strong>Od 2001.</strong><small>LOKALNIE NA KASZUBACH</small></span>'
+ card=f'<div class="hero-office-card"><div class="hero-office-card-top"><span class="hero-office-pin">{icon("pin")}</span><div><strong>{name}</strong><p class="hero-office-meta">ul. {addr} · Pon.–pt. {hours}</p></div></div><div class="hero-office-card-foot"><a class="hero-office-tel" href="{tel_href}">{tel}</a><a class="hero-office-call" href="{tel_href}">Zadzwoń {icon("phone")}</a></div></div>'
+ return f'<article class="hero-slide{active}" role="group" aria-roledescription="slajd" aria-label="{aria}"{hidden}><div class="hero-slide-stage"><img class="hero-slide-photo hero-slide-photo--{slug}" src="/assets/{slug}.webp" width="570" height="502" alt="Biuro 8699.pl w {name} przy ul. {addr}" {img_attr}>{badge}{card}</div></article>'
 slides=''.join(hero_slide(i+1,len(offices),*o[:5]) for i,o in enumerate(offices))
-hero='<section class="hero-v4"><div class="wrap hero-v4-grid"><div class="hero-v4-copy"><p class="eyebrow">DORADCY ERGO HESTII</p><h1>Ubezpieczenia.<br><span>Kościerzyna i Bytów.</span></h1><p class="hero-lede">Twój dom, samochód, firma i bliscy. Porozmawiajmy o ochronie tego, co ważne — po ludzku, na miejscu lub zdalnie.</p><div class="actions"><a class="btn" href="/kontakt/">Porozmawiaj z doradcą '+icon('arrow')+'</a><a class="btn ghost" href="/oferta/">Poznaj ofertę</a></div><ul class="hero-trust"><li>'+icon('check')+'Doradca, nie infolinia</li><li>'+icon('check')+'Dwa lokalne biura</li><li>'+icon('check')+'Obsługa w biurze i zdalnie</li></ul></div><div class="hero-slider" data-hero-slider tabindex="0" role="region" aria-roledescription="karuzela" aria-label="Biura 8699.pl w Kościerzynie i Bytowie"><div class="hero-slider-frame"><div class="hero-slider-viewport"><div class="hero-slider-track">'+slides+'</div><button type="button" class="hero-slider-prev" aria-label="Poprzednie biuro">'+icon('left')+'</button><button type="button" class="hero-slider-next" aria-label="Następne biuro">'+icon('right')+'</button><p class="hero-slider-count" aria-live="polite">01 / 02</p></div></div></div></div></section>'
+controls='<div class="hero-slider-controls"><button type="button" class="hero-slider-prev" aria-label="Poprzednie biuro">'+icon('left')+'</button><p class="hero-slider-count" aria-live="polite">01 / 02</p><button type="button" class="hero-slider-next" aria-label="Następne biuro">'+icon('right')+'</button></div>'
+hero='<section class="hero-v4"><div class="wrap hero-v4-grid"><div class="hero-v4-copy"><p class="eyebrow">DORADCY ERGO HESTII</p><h1>Ubezpieczenia.<br><span>Kościerzyna i Bytów.</span></h1><p class="hero-lede">Twój dom, samochód, firma i bliscy. Porozmawiajmy o ochronie tego, co ważne — po ludzku, na miejscu lub zdalnie.</p><div class="actions"><a class="btn" href="/kontakt/">Porozmawiaj z doradcą '+icon('arrow')+'</a><a class="btn ghost" href="/oferta/">Poznaj ofertę</a></div><ul class="hero-trust"><li>'+icon('check')+'Doradca, nie infolinia</li><li>'+icon('check')+'Dwa lokalne biura</li><li>'+icon('check')+'Obsługa w biurze i zdalnie</li></ul></div><div class="hero-slider" data-hero-slider tabindex="0" role="region" aria-roledescription="karuzela" aria-label="Biura 8699.pl w Kościerzynie i Bytowie"><div class="hero-slider-frame"><div class="hero-slider-viewport"><div class="hero-slider-track">'+slides+'</div>'+controls+'</div></div></div></div></section>'
 def faqblock(questions):return '<section class="page-faq"><h2>Najczęściej zadawane pytania</h2>'+''.join('<details><summary>'+q+'</summary><p>'+a+'</p></details>' for q,a in questions)+'</section>'
 def related(current):return '<div class="related"><p class="eyebrow">POZOSTAŁE UBEZPIECZENIA</p>'+''.join('<a href="/'+s[0]+'/">'+s[2]+' '+icon('arrow')+'</a>' for s in services if s[0]!=current)+'</div>'
 def aside(slug=''):return '<aside class="aside"><p class="eyebrow">POROZMAWIAJMY</p><h3>Twój doradca.<br>Twoje biuro.</h3><p>Wybierz dogodną formę kontaktu. Omówimy Twoją sytuację i dostępne możliwości ochrony.</p><a class="btn" href="/kontakt/">Zapytaj o ubezpieczenie '+icon('arrow')+'</a><p><a href="tel:+48586808712">Kościerzyna: 58 680 87 12</a><br><a href="tel:+48598228876">Bytów: 59 822 88 76</a></p>'+related(slug)+'</aside>'
